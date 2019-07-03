@@ -1,0 +1,22 @@
+{
+  "name": "@filru/rcon",
+  "version": "1.0.0",
+  "description": "Source (Valve) RCON Protocol implementation",
+  "author": "Ilia Liachin <seelts@gmail.com>",
+  "license": "Unlicense",
+  "private": false,
+  "main": "src/",
+  "files": [],
+  "devDependencies": {
+    "@filtu/eslint-config": "^1.0.0",
+    "@filtu/prettier-config": "^1.0.1",
+    "eslint": "^6.0.1",
+    "prettier": "^1.18.2"
+  },
+  "prettier": "@filtu/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@filtu/eslint-config"
+    ]
+  }
+}
