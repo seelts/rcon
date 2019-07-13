@@ -1,5 +1,5 @@
 {
-  "name": "@filru/rcon",
+  "name": "@filtu/rcon",
   "version": "1.0.0",
   "description": "Source (Valve) RCON Protocol implementation",
   "author": "Ilia Liachin <seelts@gmail.com>",
