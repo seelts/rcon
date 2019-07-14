@@ -15,15 +15,15 @@ function connect(host, port, password) {
   const rcon = new RCON(host, port, password);
 
   return rcon.connect().then(() => {
-    const handle = {};
+    const handle = { send, disconnect };
     instances.set(handle, rcon);
 
     return handle;
   });
 }
 
-function send(handle, command) {
-  const rcon = instances.get(handle);
+function send(command) {
+  const rcon = instances.get(this);
 
   if (!rcon) {
     throw 'Invalid handle';
@@ -32,10 +32,10 @@ function send(handle, command) {
   return rcon.sendCommand(command);
 }
 
-function disconnect(handle) {
-  const rcon = instances.get(handle);
+function disconnect() {
+  const rcon = instances.get(this);
 
-  instances.delete(handle);
+  instances.delete(this);
 
   if (!rcon) {
     throw 'Invalid handle';
@@ -163,4 +163,4 @@ class RCON {
   };
 }
 
-module.exports = { connect, send, disconnect };
+module.exports = { connect };
