@@ -52,6 +52,7 @@ class RCON {
   nextPacketId = 1;
   lastPacketId;
   response = '';
+  promise = Promise.resolve();
   resolve;
   reject;
   emptyPacket = Packet.build(1, SERVERDATA_RESPONSE_VALUE, '');
@@ -104,17 +105,23 @@ class RCON {
   }
 
   send(packet) {
-    return new Promise((resolve, reject) => {
-      this.response = '';
-      this.reject = reject;
-      this.resolve = resolve;
+    this.promise = /*this.promise.then(
+      () =>
+        */new Promise((resolve, reject) => {
+          this.response = '';
+          this.reject = reject;
+          this.resolve = resolve;
 
-      this.socket.write(new Uint8Array(packet));
+          this.socket.write(new Uint8Array(packet));
 
-      this.lastPacketId = this.getPacketId();
-      Packet.setId(this.emptyPacket, this.lastPacketId);
-      this.socket.write(new Uint8Array(this.emptyPacket));
-    });
+          this.lastPacketId = this.getPacketId();
+          Packet.setId(this.emptyPacket, this.lastPacketId);
+          this.socket.write(new Uint8Array(this.emptyPacket));
+          console.log('just wrote')
+        })
+    // );
+
+    return this.promise;
   }
 
   sendCommand = (command) => {
@@ -146,11 +153,13 @@ class RCON {
       if (packetId === this.lastPacketId) {
         // this is an empty packet, thus the previous response is ready
         this.reject = null;
+        console.log('about to resolve')
         this.resolve(this.response);
       } else {
         // this is the actual response
         // as it is ascii encoded,
         // there is no need to take care of wide characters
+        console.log('writing response')
         this.response += packet.body.toString();
       }
     }
